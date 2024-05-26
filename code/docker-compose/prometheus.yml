@@ -1,0 +1,27 @@
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+  - job_name: 'prometheus'
+    scrape_interval: 15s
+    static_configs:
+      - targets: ['localhost:9090']
+
+  - job_name: 'grafana'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['localhost:3000']
+    basic_auth:
+      username: 'admin'
+      password: 'iffmlg23'
+
+  - job_name: 'solaredge'
+    scrape_interval: 15s
+    static_configs:
+      - targets: ['localhost:2112']
+
+  - job_name: 'node_explorer'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['localhost:9100']
+

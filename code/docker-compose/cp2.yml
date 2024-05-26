@@ -1,0 +1,68 @@
+version: '3.8'
+
+networks:
+  monitoring:
+    driver: bridge
+
+
+services:
+  grafana:
+    image: "grafana/grafana:latest"
+    container_name: grafana
+    user: root
+    restart: unless-stopped
+    # environment:
+    #   GF_PATHS_CONFIG: "/etc/grafana/grafana.ini"
+
+    volumes:
+      - "${PWD-.}/grafana:/var/lib/grafana:rw"
+      # - "${PWD-.}/:/etc/grafana"
+    expose:
+      - 3000
+    ports:
+      - "3000:3000"
+
+    networks:
+      - monitoring
+
+  node-exporter:
+    image: prom/node-exporter:latest
+    container_name: node-exporter
+    restart: unless-stopped
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.rootfs=/rootfs'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
+    expose:
+      - 9100
+    ports:
+      - 9100:9100
+    networks:
+      - monitoring
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    restart: unless-stopped
+    user: root
+    volumes:
+      - ${PWD-.}/prometheus.yml:/etc/prometheus/prometheus.yml:rw
+      - ${PWD-.}/prometheus_data:/prometheus:rw
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--web.enable-lifecycle'
+    expose:
+      - 9090
+    ports:
+      - 9090:9090
+
+    networks:
+      - monitoring
