@@ -1,5 +1,4 @@
 global:
-  scrape_interval: 15s
 
 scrape_configs:
   - job_name: 'prometheus'
@@ -15,13 +14,13 @@ scrape_configs:
       username: 'admin'
       password: 'iffmlg23'
 
-  - job_name: 'solaredge'
-    scrape_interval: 15s
-    static_configs:
-      - targets: ['localhost:2112']
+  # - job_name: 'solaredge'
+  #   scrape_interval: 15s
+  #   static_configs:
+  #     - targets: ['localhost:2112']
 
   - job_name: 'node_explorer'
-    scrape_interval: 5s
+    scrape_interval: 1s
     static_configs:
       - targets: ['localhost:9100']
 
