@@ -34,7 +34,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     // });
     // let addr = "solaredge";
     let addr = "192.168.178.96";
-    let port = 1502;
+    let port = 1505;
     println!("Connecting to SolarEdge inverter at {}", addr);
     let mut solaredge = solaredge::SolarEdge::new(addr, port)?;
 
